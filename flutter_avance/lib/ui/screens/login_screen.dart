@@ -9,6 +9,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final errorMessage = _viewModel.errorMessage;
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -28,11 +29,16 @@ class LoginScreen extends StatelessWidget {
               autofillHints: const [AutofillHints.password],
               decoration: const InputDecoration(labelText: "Password"),
             ),
-            Center(
-              child: ElevatedButton(
-                  onPressed: _loggedInButtonPressed,
-                  child: const Text("Sign in")),
-            )
+            const SizedBox(height: 8),
+            if (_viewModel.isLoading)
+              const Center(child: CircularProgressIndicator())
+            else
+              Center(
+                child: ElevatedButton(
+                    onPressed: _loggedInButtonPressed,
+                    child: const Text("Sign in")),
+              ),
+            if (errorMessage != null) Text(errorMessage)
           ],
         ),
       ),
