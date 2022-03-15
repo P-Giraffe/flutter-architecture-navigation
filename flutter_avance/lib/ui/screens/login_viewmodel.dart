@@ -1,6 +1,12 @@
+import 'package:flutter_avance/data/model/user.dart';
 import 'package:flutter_avance/ui/screens/login_screen.dart';
 
+abstract class ILoginUseCases {
+  Future<User?> checkUserCredentials(String username, String password);
+}
+
 class LoginViewModel extends ILoginViewModel {
+  final ILoginUseCases _useCases;
   bool _isLoading = false;
   String? _emailErrorMessage;
   String? _passwordErrorMessage;
@@ -8,6 +14,8 @@ class LoginViewModel extends ILoginViewModel {
 
   String? _email;
   String? _password;
+
+  LoginViewModel(this._useCases);
 
   @override
   String? get passwordErrorMessage => _passwordErrorMessage;
@@ -52,10 +60,10 @@ class LoginViewModel extends ILoginViewModel {
       if (_minimalInputIsValid) {
         _isLoading = true;
         notifyListeners();
-        await Future.delayed(const Duration(seconds: 2));
+        final user = await _useCases.checkUserCredentials(email, password);
         _isLoading = false;
-        _errorMessage = password == "ok"
-            ? "Bienvenue $email"
+        _errorMessage = user != null
+            ? "Bienvenue ${user.email}"
             : "Impossible de retrouver votre compte";
         notifyListeners();
       }

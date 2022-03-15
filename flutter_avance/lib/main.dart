@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_avance/data/use_cases/login_use_cases.dart';
 import 'package:flutter_avance/ui/screens/login_screen.dart';
 import 'package:flutter_avance/ui/screens/login_viewmodel.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginScreen(LoginViewModel()),
+      home: LoginScreen(LoginViewModel(LoginUseCases())),
     );
   }
 }
