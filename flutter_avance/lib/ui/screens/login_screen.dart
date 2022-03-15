@@ -28,13 +28,17 @@ class LoginScreen extends StatelessWidget {
                       AutofillHints.username,
                       AutofillHints.email
                     ],
-                    decoration: const InputDecoration(labelText: "Email"),
+                    decoration: InputDecoration(
+                        labelText: "Email",
+                        errorText: _viewModel.emailErrorMessage),
                   ),
                   TextFormField(
                     onChanged: _viewModel.passwordChanged,
                     obscureText: true,
                     autofillHints: const [AutofillHints.password],
-                    decoration: const InputDecoration(labelText: "Password"),
+                    decoration: InputDecoration(
+                        labelText: "Password",
+                        errorText: _viewModel.passwordErrorMessage),
                   ),
                   const SizedBox(height: 8),
                   if (_viewModel.isLoading)
