@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_avance/ui/screens/login_screen.dart';
 
-class LoginViewModel extends ChangeNotifier {
+class LoginViewModel extends ILoginViewModel {
   bool _isLoading = false;
   String? _emailErrorMessage;
   String? _passwordErrorMessage;
@@ -9,16 +9,22 @@ class LoginViewModel extends ChangeNotifier {
   String? _email;
   String? _password;
 
+  @override
   String? get passwordErrorMessage => _passwordErrorMessage;
+  @override
   String? get emailErrorMessage => _emailErrorMessage;
+  @override
   bool get isLoading => _isLoading;
+  @override
   String? get errorMessage => _errorMessage;
 
+  @override
   void emailChanged(String newEmail) {
     _email = newEmail;
     _emailErrorMessage = null;
   }
 
+  @override
   void passwordChanged(String newPassword) {
     _password = newPassword;
     _passwordErrorMessage = null;
@@ -30,6 +36,7 @@ class LoginViewModel extends ChangeNotifier {
       _emailErrorMessage == null &&
       _passwordErrorMessage == null;
 
+  @override
   void loginUser() async {
     final email = _email;
     final password = _password;

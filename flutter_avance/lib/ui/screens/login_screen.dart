@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_avance/ui/screens/login_viewmodel.dart';
+
+abstract class ILoginViewModel extends ChangeNotifier {
+  String? get passwordErrorMessage;
+  String? get emailErrorMessage;
+  bool get isLoading;
+  String? get errorMessage;
+  void passwordChanged(String newPassword);
+  void loginUser();
+  void emailChanged(String newEmail);
+}
 
 class LoginScreen extends StatelessWidget {
-  final LoginViewModel _viewModel;
+  final ILoginViewModel _viewModel;
   const LoginScreen(this._viewModel, {Key? key}) : super(key: key);
 
   _loggedInButtonPressed() {
