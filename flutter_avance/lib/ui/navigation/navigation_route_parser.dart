@@ -15,4 +15,14 @@ class NavigationRouteParser extends RouteInformationParser<NavigationPath> {
     }
     return Future.value(NavigationPath(userId: userId));
   }
+
+  @override
+  RouteInformation? restoreRouteInformation(NavigationPath configuration) {
+    String location = "/";
+    final userId = configuration.userId;
+    if (userId != null) {
+      location = location + "user/$userId";
+    }
+    return RouteInformation(location: location);
+  }
 }
