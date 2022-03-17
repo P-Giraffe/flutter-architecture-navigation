@@ -1,5 +1,5 @@
 class NavigationPath {
   final int? userId;
 
-  NavigationPath({required this.userId});
+  const NavigationPath({required this.userId});
 }
