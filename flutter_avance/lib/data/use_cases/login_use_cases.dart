@@ -10,7 +10,7 @@ class LoginUseCases implements ILoginUseCases {
   Future<User?> checkUserCredentials(String username, String password) async {
     await Future.delayed(const Duration(seconds: 2));
     if (password == "ok") {
-      return User(username);
+      return User(23, username);
     } else {
       return null;
     }
