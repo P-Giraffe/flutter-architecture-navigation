@@ -5,24 +5,31 @@ import 'package:flutter_avance/data/use_cases/login_use_cases.dart';
 import 'package:flutter_avance/ui/navigation/navigation_path.dart';
 import 'package:flutter_avance/ui/screens/login_screen.dart';
 import 'package:flutter_avance/ui/screens/login_viewmodel.dart';
+import 'package:flutter_avance/ui/screens/settings_screen.dart';
 import 'package:flutter_avance/ui/screens/user_home_screen.dart';
 import 'package:flutter_avance/ui/screens/user_home_viewmodel.dart';
 
 class NavigationDelegate extends RouterDelegate<NavigationPath>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<NavigationPath> {
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<NavigationPath>
+    implements UserHomeRouter {
   final RemoteDataManager _remoteDataManager = RemoteDataManager();
   User? _currentUser;
+  bool _displaySettings = false;
 
   @override
   Widget build(BuildContext context) {
     final List<Page<dynamic>> pagesList = [];
     final user = _currentUser;
     if (user != null) {
-      final homeScreen = UserHomeScreen(UserHomeViewModel(user));
+      final homeScreen = UserHomeScreen(UserHomeViewModel(user, this));
       pagesList.add(MaterialPage(child: homeScreen));
     } else {
       final loginScreen = LoginScreen(LoginViewModel(LoginUseCases()));
       pagesList.add(MaterialPage(child: loginScreen));
+    }
+
+    if (_displaySettings == true) {
+      pagesList.add(const MaterialPage(child: SettingsScreen()));
     }
 
     return Navigator(
@@ -46,5 +53,11 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
         _currentUser = currentUser;
       }
     }
+  }
+
+  @override
+  displaySettings() {
+    _displaySettings = true;
+    notifyListeners();
   }
 }

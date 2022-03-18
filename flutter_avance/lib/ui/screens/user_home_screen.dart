@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 abstract class IUserHomeViewModel {
   String get email;
+
+  void userTouchedSettingsButton();
 }
 
 class UserHomeScreen extends StatelessWidget {
@@ -16,7 +18,11 @@ class UserHomeScreen extends StatelessWidget {
         Text(
           viewModel.email,
           style: Theme.of(context).textTheme.displayMedium,
-        )
+        ),
+        ElevatedButton.icon(
+            onPressed: viewModel.userTouchedSettingsButton,
+            icon: const Icon(Icons.settings),
+            label: const Text("Settings"))
       ]),
     );
   }
