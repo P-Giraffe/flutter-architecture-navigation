@@ -20,21 +20,35 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
   Widget build(BuildContext context) {
     final List<Page<dynamic>> pagesList = [];
     final user = _currentUser;
-    if (user != null) {
-      final homeScreen = UserHomeScreen(UserHomeViewModel(user, this));
-      pagesList.add(MaterialPage(child: homeScreen));
-    } else {
+    if (user == null) {
       final loginScreen = LoginScreen(LoginViewModel(LoginUseCases()));
       pagesList.add(MaterialPage(child: loginScreen));
-    }
+    } else {
+      final homeScreen = UserHomeScreen(UserHomeViewModel(user, this));
+      pagesList.add(MaterialPage(child: homeScreen));
 
-    if (_displaySettings == true) {
-      pagesList.add(const MaterialPage(child: SettingsScreen()));
+      if (_displaySettings == true) {
+        pagesList.add(const MaterialPage(child: SettingsScreen()));
+      }
     }
 
     return Navigator(
       pages: pagesList,
+      onPopPage: (route, result) {
+        if (route.didPop(result) == false) {
+          return false;
+        }
+        return onBackButtonTouched(result);
+      },
     );
+  }
+
+  bool onBackButtonTouched(dynamic result) {
+    if (_displaySettings) {
+      _displaySettings = false;
+    }
+    notifyListeners();
+    return true;
   }
 
   @override
