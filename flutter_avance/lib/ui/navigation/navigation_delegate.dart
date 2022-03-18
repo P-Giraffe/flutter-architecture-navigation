@@ -28,7 +28,6 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
       final currentUser = await _remoteDataManager.loadCurrentUser();
       if (currentUser != null && currentUser.id == configuration.userId) {
         _currentUser = currentUser;
-        notifyListeners();
       }
     }
   }
