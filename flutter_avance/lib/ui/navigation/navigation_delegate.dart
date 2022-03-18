@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_avance/data/controllers/remote_data_manager.dart';
 import 'package:flutter_avance/data/model/user.dart';
+import 'package:flutter_avance/data/use_cases/login_use_cases.dart';
 import 'package:flutter_avance/ui/navigation/navigation_path.dart';
+import 'package:flutter_avance/ui/screens/login_screen.dart';
+import 'package:flutter_avance/ui/screens/login_viewmodel.dart';
+import 'package:flutter_avance/ui/screens/user_home_screen.dart';
+import 'package:flutter_avance/ui/screens/user_home_viewmodel.dart';
 
 class NavigationDelegate extends RouterDelegate<NavigationPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<NavigationPath> {
@@ -10,8 +15,19 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    final List<Page<dynamic>> pagesList = [];
+    final user = _currentUser;
+    if (user != null) {
+      final homeScreen = UserHomeScreen(UserHomeViewModel(user));
+      pagesList.add(MaterialPage(child: homeScreen));
+    } else {
+      final loginScreen = LoginScreen(LoginViewModel(LoginUseCases()));
+      pagesList.add(MaterialPage(child: loginScreen));
+    }
+
+    return Navigator(
+      pages: pagesList,
+    );
   }
 
   @override
