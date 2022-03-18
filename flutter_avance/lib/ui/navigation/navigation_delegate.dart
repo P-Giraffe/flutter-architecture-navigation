@@ -11,7 +11,7 @@ import 'package:flutter_avance/ui/screens/user_home_viewmodel.dart';
 
 class NavigationDelegate extends RouterDelegate<NavigationPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<NavigationPath>
-    implements UserHomeRouter {
+    implements UserHomeRouter, LoginRouter {
   final RemoteDataManager _remoteDataManager = RemoteDataManager();
   User? _currentUser;
   bool _displaySettings = false;
@@ -21,7 +21,7 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
     final List<Page<dynamic>> pagesList = [];
     final user = _currentUser;
     if (user == null) {
-      final loginScreen = LoginScreen(LoginViewModel(LoginUseCases()));
+      final loginScreen = LoginScreen(LoginViewModel(LoginUseCases(), this));
       pagesList.add(MaterialPage(child: loginScreen));
     } else {
       final homeScreen = UserHomeScreen(UserHomeViewModel(user, this));
@@ -72,6 +72,18 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
   @override
   displaySettings() {
     _displaySettings = true;
+    notifyListeners();
+  }
+
+  @override
+  void displayUser(User user) {
+    _currentUser = user;
+    notifyListeners();
+  }
+
+  @override
+  void logoutCurrentUser() {
+    _currentUser = null;
     notifyListeners();
   }
 }

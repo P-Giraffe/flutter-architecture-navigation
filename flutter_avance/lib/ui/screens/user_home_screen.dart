@@ -4,6 +4,7 @@ abstract class IUserHomeViewModel {
   String get email;
 
   void userTouchedSettingsButton();
+  void userTouchedLogoutButton();
 }
 
 class UserHomeScreen extends StatelessWidget {
@@ -22,7 +23,10 @@ class UserHomeScreen extends StatelessWidget {
         ElevatedButton.icon(
             onPressed: viewModel.userTouchedSettingsButton,
             icon: const Icon(Icons.settings),
-            label: const Text("Settings"))
+            label: const Text("Settings")),
+        OutlinedButton(
+            onPressed: viewModel.userTouchedLogoutButton,
+            child: const Text("Logout")),
       ]),
     );
   }

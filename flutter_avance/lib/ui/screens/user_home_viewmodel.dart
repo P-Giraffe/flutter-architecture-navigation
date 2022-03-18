@@ -3,6 +3,7 @@ import 'package:flutter_avance/ui/screens/user_home_screen.dart';
 
 abstract class UserHomeRouter {
   displaySettings();
+  void logoutCurrentUser();
 }
 
 class UserHomeViewModel extends IUserHomeViewModel {
@@ -16,5 +17,10 @@ class UserHomeViewModel extends IUserHomeViewModel {
   @override
   void userTouchedSettingsButton() {
     _router.displaySettings();
+  }
+
+  @override
+  void userTouchedLogoutButton() {
+    _router.logoutCurrentUser();
   }
 }

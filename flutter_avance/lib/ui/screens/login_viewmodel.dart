@@ -5,7 +5,12 @@ abstract class ILoginUseCases {
   Future<User?> checkUserCredentials(String username, String password);
 }
 
+abstract class LoginRouter {
+  void displayUser(User user);
+}
+
 class LoginViewModel extends ILoginViewModel {
+  final LoginRouter _router;
   final ILoginUseCases _useCases;
   bool _isLoading = false;
   String? _emailErrorMessage;
@@ -15,7 +20,7 @@ class LoginViewModel extends ILoginViewModel {
   String? _email;
   String? _password;
 
-  LoginViewModel(this._useCases);
+  LoginViewModel(this._useCases, this._router);
 
   @override
   String? get passwordErrorMessage => _passwordErrorMessage;
@@ -62,9 +67,12 @@ class LoginViewModel extends ILoginViewModel {
         notifyListeners();
         final user = await _useCases.checkUserCredentials(email, password);
         _isLoading = false;
-        _errorMessage = user != null
-            ? "Bienvenue ${user.email}"
-            : "Impossible de retrouver votre compte";
+        if (user != null) {
+          _router.displayUser(user);
+        } else {
+          _errorMessage = "Impossible de retrouver votre compte";
+        }
+
         notifyListeners();
       }
     }
