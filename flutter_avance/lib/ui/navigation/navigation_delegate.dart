@@ -33,6 +33,7 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
     }
 
     return Navigator(
+      key: navigatorKey,
       pages: pagesList,
       onPopPage: (route, result) {
         if (route.didPop(result) == false) {
