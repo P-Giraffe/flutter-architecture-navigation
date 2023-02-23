@@ -7,7 +7,6 @@ class UserAwardsUseCases {
   UserAwardsUseCases(this._remoteDataManager);
 
   Future<List<Award>> fetchAll() async {
-    await Future.delayed(const Duration(seconds: 1));
     return _remoteDataManager.awardList();
   }
 }

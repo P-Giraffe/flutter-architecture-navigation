@@ -13,7 +13,8 @@ class RemoteDataManager implements IRemoteDataManager {
   }
 
   @override
-  Future<List<Award>> awardList() {
+  Future<List<Award>> awardList() async {
+    await Future.delayed(const Duration(seconds: 1));
     return Future.value(const [
       Award("Rookie de l'année", 1984),
       Award("Rookie de l'année", 1985),

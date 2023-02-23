@@ -25,14 +25,18 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
     final homeViewModel = this.homeViewModel;
     if (homeViewModel == null) {
       final loginScreen = LoginScreen(LoginViewModel(LoginUseCases(), this));
-      pagesList.add(MaterialPage(child: loginScreen));
+      pagesList.add(
+          MaterialPage(child: loginScreen, key: const ValueKey("LoginScreen")));
     } else {
       final homeScreen = UserHomeScreen(homeViewModel);
-      pagesList.add(MaterialPage(child: homeScreen));
+      pagesList.add(
+          MaterialPage(child: homeScreen, key: const ValueKey("HomeScreen")));
 
       if (shouldDisplaySettings == true) {
         pagesList.add(const MaterialPage(
-            child: SettingsScreen(), fullscreenDialog: true));
+            child: SettingsScreen(),
+            fullscreenDialog: true,
+            key: ValueKey("SettingsScreen")));
       }
     }
 
