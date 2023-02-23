@@ -3,6 +3,8 @@ import 'package:flutter_avance/data/use_cases/login_use_cases.dart';
 import 'package:flutter_avance/ui/navigation/navigation_delegate.dart';
 import 'package:flutter_avance/ui/navigation/navigation_route_parser.dart';
 
+import 'data/controllers/remote_data_manager.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -15,7 +17,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final navigationDelegate = NavigationDelegate();
+  final navigationDelegate =
+      NavigationDelegate(remoteDataManager: RemoteDataManager());
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

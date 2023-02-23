@@ -12,7 +12,7 @@ abstract class UserHomeRouter {
 class UserHomeViewModel extends IUserHomeViewModel {
   final User _user;
   final UserHomeRouter _router;
-  final RemoteDataManager _remoteDataManager;
+  final IRemoteDataManager _remoteDataManager;
 
   UserHomeViewModel(this._user, this._router, this._remoteDataManager) {
     loadAwardList();

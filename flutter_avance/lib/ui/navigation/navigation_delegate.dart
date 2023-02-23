@@ -12,10 +12,12 @@ import 'package:flutter_avance/ui/screens/user_home_viewmodel.dart';
 class NavigationDelegate extends RouterDelegate<NavigationPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<NavigationPath>
     implements UserHomeRouter, LoginRouter {
-  final RemoteDataManager _remoteDataManager = RemoteDataManager();
+  final IRemoteDataManager remoteDataManager;
   User? _currentUser;
   bool _displaySettings = false;
   UserHomeViewModel? homeViewModel;
+
+  NavigationDelegate({required this.remoteDataManager});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,8 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
       pagesList.add(MaterialPage(child: homeScreen));
 
       if (_displaySettings == true) {
-        pagesList.add(const MaterialPage(child: SettingsScreen()));
+        pagesList.add(const MaterialPage(
+            child: SettingsScreen(), fullscreenDialog: true));
       }
     }
 
@@ -64,7 +67,7 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
   Future<void> setNewRoutePath(NavigationPath configuration) async {
     final userId = configuration.userId;
     if (userId != null && _currentUser == null) {
-      final currentUser = await _remoteDataManager.loadCurrentUser();
+      final currentUser = await remoteDataManager.loadCurrentUser();
       if (currentUser != null && currentUser.id == configuration.userId) {
         _currentUser = currentUser;
       }
@@ -80,7 +83,7 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
   @override
   void displayUser(User user) {
     _currentUser = user;
-    homeViewModel = UserHomeViewModel(user, this, _remoteDataManager);
+    homeViewModel = UserHomeViewModel(user, this, remoteDataManager);
     notifyListeners();
   }
 

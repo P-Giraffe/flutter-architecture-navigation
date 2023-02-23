@@ -1,12 +1,8 @@
+import 'package:flutter_avance/data/controllers/remote_data_manager.dart';
 import 'package:flutter_avance/data/model/award.dart';
 import 'package:flutter_avance/data/model/user.dart';
 
-abstract class IRemoteDataManager {
-  Future<User?> loadCurrentUser();
-  Future<List<Award>> awardList();
-}
-
-class RemoteDataManager implements IRemoteDataManager {
+class MockRemoteDataManager implements IRemoteDataManager {
   @override
   Future<User?> loadCurrentUser() {
     return Future.value(const User(23, "michael@chicagobulls.com"));

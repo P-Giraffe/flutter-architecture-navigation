@@ -2,7 +2,7 @@ import 'package:flutter_avance/data/controllers/remote_data_manager.dart';
 import 'package:flutter_avance/data/model/award.dart';
 
 class UserAwardsUseCases {
-  final RemoteDataManager _remoteDataManager;
+  final IRemoteDataManager _remoteDataManager;
 
   UserAwardsUseCases(this._remoteDataManager);
 
