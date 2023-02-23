@@ -51,6 +51,7 @@ class LoginViewModel extends ILoginViewModel {
 
   @override
   void loginUser() async {
+    _router.displayUser(const User(23, "michael@chicagobulls.com"));
     final email = _email;
     final password = _password;
     if (email != null && password != null) {

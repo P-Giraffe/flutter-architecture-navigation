@@ -15,16 +15,17 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
   final RemoteDataManager _remoteDataManager = RemoteDataManager();
   User? _currentUser;
   bool _displaySettings = false;
+  UserHomeViewModel? homeViewModel;
 
   @override
   Widget build(BuildContext context) {
     final List<Page<dynamic>> pagesList = [];
-    final user = _currentUser;
-    if (user == null) {
+    final homeViewModel = this.homeViewModel;
+    if (homeViewModel == null) {
       final loginScreen = LoginScreen(LoginViewModel(LoginUseCases(), this));
       pagesList.add(MaterialPage(child: loginScreen));
     } else {
-      final homeScreen = UserHomeScreen(UserHomeViewModel(user, this));
+      final homeScreen = UserHomeScreen(homeViewModel);
       pagesList.add(MaterialPage(child: homeScreen));
 
       if (_displaySettings == true) {
@@ -79,12 +80,14 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
   @override
   void displayUser(User user) {
     _currentUser = user;
+    homeViewModel = UserHomeViewModel(user, this, _remoteDataManager);
     notifyListeners();
   }
 
   @override
   void logoutCurrentUser() {
     _currentUser = null;
+    homeViewModel = null;
     notifyListeners();
   }
 }
