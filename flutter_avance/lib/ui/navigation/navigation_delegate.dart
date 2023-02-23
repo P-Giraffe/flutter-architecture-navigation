@@ -13,8 +13,8 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<NavigationPath>
     implements UserHomeRouter, LoginRouter {
   final IRemoteDataManager remoteDataManager;
-  User? _currentUser;
-  bool _displaySettings = false;
+  User? currentUser;
+  bool shouldDisplaySettings = false;
   UserHomeViewModel? homeViewModel;
 
   NavigationDelegate({required this.remoteDataManager});
@@ -30,7 +30,7 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
       final homeScreen = UserHomeScreen(homeViewModel);
       pagesList.add(MaterialPage(child: homeScreen));
 
-      if (_displaySettings == true) {
+      if (shouldDisplaySettings == true) {
         pagesList.add(const MaterialPage(
             child: SettingsScreen(), fullscreenDialog: true));
       }
@@ -49,8 +49,8 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
   }
 
   bool onBackButtonTouched(dynamic result) {
-    if (_displaySettings) {
-      _displaySettings = false;
+    if (shouldDisplaySettings) {
+      shouldDisplaySettings = false;
     }
     notifyListeners();
     return true;
@@ -58,7 +58,7 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
 
   @override
   NavigationPath? get currentConfiguration =>
-      NavigationPath(userId: _currentUser?.id);
+      NavigationPath(userId: currentUser?.id);
 
   @override
   GlobalKey<NavigatorState>? navigatorKey = GlobalKey<NavigatorState>();
@@ -66,30 +66,30 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
   @override
   Future<void> setNewRoutePath(NavigationPath configuration) async {
     final userId = configuration.userId;
-    if (userId != null && _currentUser == null) {
-      final currentUser = await remoteDataManager.loadCurrentUser();
-      if (currentUser != null && currentUser.id == configuration.userId) {
-        _currentUser = currentUser;
+    if (userId != null && currentUser == null) {
+      final user = await remoteDataManager.loadCurrentUser();
+      if (user != null && user.id == configuration.userId) {
+        currentUser = user;
       }
     }
   }
 
   @override
   displaySettings() {
-    _displaySettings = true;
+    shouldDisplaySettings = true;
     notifyListeners();
   }
 
   @override
   void displayUser(User user) {
-    _currentUser = user;
+    currentUser = user;
     homeViewModel = UserHomeViewModel(user, this, remoteDataManager);
     notifyListeners();
   }
 
   @override
   void logoutCurrentUser() {
-    _currentUser = null;
+    currentUser = null;
     homeViewModel = null;
     notifyListeners();
   }
