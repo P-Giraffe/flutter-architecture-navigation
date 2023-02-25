@@ -3,6 +3,7 @@ import 'package:flutter_avance/data/controllers/remote_data_manager.dart';
 import 'package:flutter_avance/data/model/user.dart';
 import 'package:flutter_avance/data/use_cases/login_use_cases.dart';
 import 'package:flutter_avance/ui/navigation/navigation_path.dart';
+import 'package:flutter_avance/ui/navigation/sub_navigation_delegate.dart';
 import 'package:flutter_avance/ui/screens/login_screen.dart';
 import 'package:flutter_avance/ui/screens/login_viewmodel.dart';
 import 'package:flutter_avance/ui/screens/settings_screen.dart';
@@ -11,11 +12,12 @@ import 'package:flutter_avance/ui/screens/user_home_viewmodel.dart';
 
 class NavigationDelegate extends RouterDelegate<NavigationPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<NavigationPath>
-    implements UserHomeRouter, LoginRouter {
+    implements UserHomeRouter, LoginRouter, IMainRouter {
   final IRemoteDataManager remoteDataManager;
   User? currentUser;
   bool shouldDisplaySettings = false;
   UserHomeViewModel? homeViewModel;
+  SubNavigationDelegate? subRouter;
 
   NavigationDelegate({required this.remoteDataManager});
 
@@ -37,6 +39,11 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
             child: SettingsScreen(),
             fullscreenDialog: true,
             key: ValueKey("SettingsScreen")));
+
+        final wizardRouter = subRouter;
+        if (wizardRouter != null) {
+          pagesList.addAll(wizardRouter.buildPageList(context));
+        }
       }
     }
 
@@ -54,7 +61,12 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
 
   bool onBackButtonTouched(dynamic result) {
     if (shouldDisplaySettings) {
-      shouldDisplaySettings = false;
+      final wizardRouter = subRouter;
+      if (wizardRouter != null) {
+        wizardRouter.onBackButtonTouched(result);
+      } else {
+        shouldDisplaySettings = false;
+      }
     }
     notifyListeners();
     return true;
@@ -62,7 +74,7 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
 
   @override
   NavigationPath? get currentConfiguration =>
-      NavigationPath(userId: currentUser?.id);
+      currentUser == null ? null : NavigationPath(userId: currentUser?.id);
 
   @override
   GlobalKey<NavigatorState>? navigatorKey = GlobalKey<NavigatorState>();
@@ -76,6 +88,11 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
         currentUser = user;
       }
     }
+  }
+
+  declencherLaSousNavigation() {
+    subRouter = SubNavigationDelegate(this);
+    notifyListeners();
   }
 
   @override
@@ -95,6 +112,17 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
   void logoutCurrentUser() {
     currentUser = null;
     homeViewModel = null;
+    notifyListeners();
+  }
+
+  @override
+  childRouterDidChange() {
+    notifyListeners();
+  }
+
+  @override
+  wizardWasFinishedByTheUser() {
+    subRouter = null;
     notifyListeners();
   }
 }

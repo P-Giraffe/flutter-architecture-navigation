@@ -22,6 +22,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      restorationScopeId: "main-navigation-restoration-id",
       title: 'Purple Giraffe - Flutter Avancé',
       theme: ThemeData(
         primarySwatch: Colors.blue,
