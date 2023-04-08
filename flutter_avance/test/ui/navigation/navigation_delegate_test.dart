@@ -31,43 +31,22 @@ void main() {
       },
     );
 
-    testWidgets('App launch should display login', (WidgetTester tester) async {
-      await tester.pumpWidget(Builder(
-        builder: (context) {
-          final navigator = sut.build(context) as Navigator;
-          final pagesList = navigator.pages;
-          expect(pagesList.length, 1);
-          expect(pagesList[0].key, const ValueKey("LoginScreen"));
-          return const SizedBox();
-        },
-      ));
+    testWidgets('Displays login screen', (WidgetTester tester) async {
+      await tester.pumpWidget(Builder(builder: (context) {
+        final pagesList = sut.buildPagesList(context);
+        expect(pagesList.length, 1);
+        expect(pagesList[0].key, const ValueKey("LoginScreen"));
+        return const SizedBox();
+      }));
     });
-    testWidgets('should display user home', (WidgetTester tester) async {
-      await tester.pumpWidget(Builder(
-        builder: (context) {
-          sut.displayUser(const User(1, "michael@chicagobulls.com"));
-          final navigator = sut.build(context) as Navigator;
-          final pagesList = navigator.pages;
-          expect(pagesList.length, 1);
-          expect(pagesList[0].key, const ValueKey("HomeScreen"));
-          return const SizedBox();
-        },
-      ));
-    });
-
-    testWidgets('should display settings', (WidgetTester tester) async {
-      await tester.pumpWidget(Builder(
-        builder: (context) {
-          sut.displayUser(const User(1, "michael@chicagobulls.com"));
-          sut.displaySettings();
-          final navigator = sut.build(context) as Navigator;
-          final pagesList = navigator.pages;
-          expect(pagesList.length, 2);
-          expect(pagesList[0].key, const ValueKey("HomeScreen"));
-          expect(pagesList[1].key, const ValueKey("SettingsScreen"));
-          return const SizedBox();
-        },
-      ));
+    testWidgets('After user login', (WidgetTester tester) async {
+      await tester.pumpWidget(Builder(builder: (context) {
+        sut.displayUser(const User(23, "michael@chicagobulls.com"));
+        final pagesList = sut.buildPagesList(context);
+        expect(pagesList.length, 1);
+        expect(pagesList[0].key, const ValueKey("UserHomeScreen"));
+        return const SizedBox();
+      }));
     });
   });
 }

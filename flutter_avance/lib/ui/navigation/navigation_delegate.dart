@@ -23,6 +23,21 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
 
   @override
   Widget build(BuildContext context) {
+    List<Page<dynamic>> pagesList = buildPagesList(context);
+
+    return Navigator(
+      key: navigatorKey,
+      pages: pagesList,
+      onPopPage: (route, result) {
+        if (route.didPop(result) == false) {
+          return false;
+        }
+        return onBackButtonTouched(result);
+      },
+    );
+  }
+
+  List<Page<dynamic>> buildPagesList(BuildContext context) {
     final List<Page<dynamic>> pagesList = [];
     final homeViewModel = this.homeViewModel;
     if (homeViewModel == null) {
@@ -31,8 +46,8 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
           MaterialPage(child: loginScreen, key: const ValueKey("LoginScreen")));
     } else {
       final homeScreen = UserHomeScreen(homeViewModel);
-      pagesList.add(
-          MaterialPage(child: homeScreen, key: const ValueKey("HomeScreen")));
+      pagesList.add(MaterialPage(
+          child: homeScreen, key: const ValueKey("UserHomeScreen")));
 
       if (shouldDisplaySettings == true) {
         pagesList.add(const MaterialPage(
@@ -46,17 +61,7 @@ class NavigationDelegate extends RouterDelegate<NavigationPath>
         }
       }
     }
-
-    return Navigator(
-      key: navigatorKey,
-      pages: pagesList,
-      onPopPage: (route, result) {
-        if (route.didPop(result) == false) {
-          return false;
-        }
-        return onBackButtonTouched(result);
-      },
-    );
+    return pagesList;
   }
 
   bool onBackButtonTouched(dynamic result) {
